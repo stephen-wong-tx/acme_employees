@@ -72,6 +72,5 @@ console.log(generateManagementTree(employees));
 //   flatTree.forEach(employee => {
 //     console.log(`${dashCounts(employee)}${employee.name}`)
 //   })
-  
 // }
 // console.log(displayManagementTree(generateManagementTree(employees)));
