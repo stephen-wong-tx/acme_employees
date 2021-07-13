@@ -26,45 +26,52 @@ const findCoworkersFor = (func, array) => {
   return coworkers;
 }
 
-
-// console.log(findCoworkersFor(findEmployeeByName('larry', employees), employees));
-
-
-//given an employee and a list of employees, return a the management chain for that employee. The management chain starts from the employee with no manager with the passed in employees manager 
-// console.log(findManagementChainForEmployee(findEmployeeByName('moe', employees), employees));//[  ]
-
-// console.log(findManagementChainForEmployee(findEmployeeByName('shep Jr.', employees), employees));/*
-// [ { id: 1, name: 'moe' },
-//   { id: 2, name: 'larry', managerId: 1 },
-//   { id: 4, name: 'shep', managerId: 2 }]
-
 const findManagementChainForEmployee = (func, array) => {
-  console.log('func: ', func);
-
   let result = [];
-
-  if (func['managerId'] === undefined) return func;
   let manager = findManagerFor(func, array);
-
-  result.push({...manager});
-  console.log('result', result);
-  return result.push(findManagementChainForEmployee(manager, array));
+  while (manager !== undefined) {
+    let nextManager = manager.name;
+    result.unshift(manager);
+    manager = findManagerFor(findEmployeeByName(nextManager, array), array);
+  }
+  return result;
 }
-console.log('final result: ', findManagementChainForEmployee(findEmployeeByName('shep Jr.', employees), employees))
-// const findManagementChainForEmployee = (func, array) => {
-//   let result = [];
-//   let manager = findManagerFor(func, array);
-//   if (manager === undefined) {
-//     return result;
+
+const generateManagementTree = (array) => {
+  let topBoss = array.filter(employeeObj => employeeObj.managerId === undefined)[0];
+
+  function getBranch(currentEmployee) {
+    branch = array.filter(employee => employee.managerId === currentEmployee.id);
+    currentEmployee.reports = branch;
+    if (branch === []) return branch;  
+    else branch.forEach(suboordinate => getBranch(suboordinate));   
+  }
+
+  getBranch(topBoss);
+  console.log('FINAL RESULT: ', topBoss);
+  return topBoss;
+}
+
+console.log(generateManagementTree(employees));
+
+// const displayManagementTree = tree => {
+//   console.log(tree.name);
+//   let flatTree = tree.reports.flat();
+  
+//   function dashCounts(branch) {
+//     let dashCounts = 1;
+//     if (branch.reports.length === 0) {
+//       return dashCounts;
+//     }
+//     else {
+//       dashCounts += 1; 
+//       return dashCounts += dashCounts(branch);
+//     }
 //   }
-//   else {
-//     result.push({...manager});
-//     let chain = array.reduce((chain, employee) => {
-//       let pointer = result[0];
-//       if (employee === pointer) {
-//         chain.unshift(findManagerFor(pointer, array));
-//       }
-//       return chain;  
-//     }, result)
-//   }
+
+//   flatTree.forEach(employee => {
+//     console.log(`${dashCounts(employee)}${employee.name}`)
+//   })
+  
 // }
+// console.log(displayManagementTree(generateManagementTree(employees)));
