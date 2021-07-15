@@ -52,25 +52,25 @@ const generateManagementTree = (array) => {
   return topBoss;
 }
 
-console.log(generateManagementTree(employees));
+// console.log(generateManagementTree(employees));
 
-// const displayManagementTree = tree => {
-//   console.log(tree.name);
-//   let flatTree = tree.reports.flat();
+const displayManagementTree = tree => {
+  console.log(tree.name);
+  let flatTree = tree.reports.flat();
   
-//   function dashCounts(branch) {
-//     let dashCounts = 1;
-//     if (branch.reports.length === 0) {
-//       return dashCounts;
-//     }
-//     else {
-//       dashCounts += 1; 
-//       return dashCounts += dashCounts(branch);
-//     }
-//   }
+  function dashCounts(branch) {
+    let dashCount = 1;
+    if (branch.reports.length === 0) {
+      return dashCount;
+    }
+    else {
+      dashCount += 1; 
+      return dashCounts += dashCounts(branch);
+    }
+  }
 
-//   flatTree.forEach(employee => {
-//     console.log(`${dashCounts(employee)}${employee.name}`)
-//   })
-// }
-// console.log(displayManagementTree(generateManagementTree(employees)));
+  flatTree.forEach(employee => {
+    console.log(`${dashCounts(employee)}${employee.name}`)
+  })
+}
+console.log(displayManagementTree(generateManagementTree(employees)));
